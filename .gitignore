@@ -1,1 +1,3 @@
-extension/
+*class
+extension/server/lucene
+extension/server/documents
