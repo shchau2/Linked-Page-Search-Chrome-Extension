@@ -8,7 +8,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="../lucene/core/lucene-core-8.10.1.jar"/>
 	<classpathentry kind="lib" path="../lucene/queryparser/lucene-queryparser-8.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/shchau/cs410/Linked-Page-Search-Chrome-Extension/extension/server/lucene/highlighter/lucene-highlighter-8.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/shchau/cs410/Linked-Page-Search-Chrome-Extension/extension/server/lucene/memory/lucene-memory-8.10.1.jar"/>
+	<classpathentry kind="lib" path="../lucene/highlighter/lucene-highlighter-8.10.1.jar"/>
+	<classpathentry kind="lib" path="../lucene/memory/lucene-memory-8.10.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

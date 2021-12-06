@@ -54,15 +54,15 @@ public class Searcher {
             Document doc = indexReader.document(docid);
             String title = doc.get("Title");
             String text = doc.get("Content");
-            
-            
-            System.out.println(title);
-            String[] frags = highlighter.getBestFragments(new StandardAnalyzer(), null, text, 10);
+            String[] frags = highlighter.getBestFragments(new StandardAnalyzer(), null, text, 3);
+            System.out.println(String.format("<div class=\"result\" id=\"%s\">", title));
             for (String frag : frags) 
             {
-                System.out.println(frag);
+            	System.out.print("<p>");
+                System.out.print(frag);
+                System.out.println(" ...</p>");
             }
-            System.out.println("=======================");
+            System.out.println("</div>");
         }
 	}
 }

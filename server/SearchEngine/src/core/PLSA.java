@@ -30,6 +30,9 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 
 public class PLSA {
+	static final int MAX_ITER = 500;
+	static final double EPSILON = 1;
+	
 	IndexReader indexReader;
 	int d; // number of documents;
 	int w; // number of words;
@@ -83,7 +86,7 @@ public class PLSA {
 		}
 		
 		double prevLogLikelihood = Double.NEGATIVE_INFINITY;
-		for (int iter = 0; iter < 500; iter++) {
+		for (int iter = 0; iter < MAX_ITER; iter++) {
 			// E step
 			for (int wi = 0; wi < w; wi++) {
 				for (int di = 0; di < d; di++) {
@@ -139,18 +142,28 @@ public class PLSA {
 				}
 				logLikelihood += docLogLikelihood;
 			}
-			if (logLikelihood - prevLogLikelihood < 1) {
-				System.out.println("Topic analysis completed in " + iter + " iterations.");
-				System.out.println(indexReader.document(1).get("Title"));
-				int argMaxCoverage = argmax(docTopicCoverage[1]);
-				int[] distributionSorted = argsort(wordDistribution[argMaxCoverage]);
-				int len = distributionSorted.length;
-				for (int i = 0; i < 20; i++) {
-					System.out.println(words[distributionSorted[len-i-1]]);					
-				}
+			if (logLikelihood - prevLogLikelihood < EPSILON) {
+				printResult(docTopicCoverage, wordDistribution, iter);
 				return;
 			}
 			prevLogLikelihood = logLikelihood;
+		}
+	}
+
+	private void printResult(double[][] docTopicCoverage, double[][] wordDistribution, int iter) throws IOException {
+		System.out.println("<p>Topic analysis completed in " + iter + " iterations.</p>");
+		for (int docID = 0; docID < indexReader.getDocCount("Content"); docID++) {
+			System.out.println(String.format("<div id=%s>", indexReader.document(docID).get("Title")));
+			int[] coverageSorted = argsort(docTopicCoverage[docID]);
+			for (int i = 0; i < Math.min(coverageSorted.length, 1); i++) {
+				System.out.print("<p>Topic " + i + ": ");
+				int[] distributionSorted = argsort(wordDistribution[coverageSorted[i]]);
+				for (int j = 0; j < Math.min(words.length, 10); j++) {
+					System.out.print(words[distributionSorted[j]] + " ");					
+				}
+				System.out.println("</p>");
+			}
+			System.out.println("</div>");
 		}
 	}
 	
@@ -195,18 +208,7 @@ public class PLSA {
 	    }
 	}
 	
-	private int argmax(double[] vec) {
-		int arg = -1;
-		double max = Double.NEGATIVE_INFINITY;
-		for (int i = 0; i < vec.length; i++) {
-			if (vec[i] > max) {
-				arg = i;
-				max = vec[i];
-			}
-		}
-		return arg;
-	}
-	
+	// Output: [position of largest element, position of second largest element, ...]
 	private int[] argsort(double[] vec) {
 		Double[][] vecPair = new Double[vec.length][2];
 		for (int i = 0; i < vec.length; i++) {
@@ -215,7 +217,7 @@ public class PLSA {
 		}
 		Arrays.sort(vecPair, new Comparator<Double[]>() {
 			public int compare(Double[] a, Double[] b) {
-				return Double.compare(a[0], b[0]);
+				return Double.compare(b[0], a[0]);
 			}
 		});
 		
@@ -224,12 +226,5 @@ public class PLSA {
 			ret[i] = vecPair[i][1].intValue();
 		}
 		return ret;
-	}
-	
-	private void debugPrint(double[] vec) {
-		DecimalFormat df = new DecimalFormat("0.000");
-		for (double val : vec) {
-	        System.out.print(df.format(val) + ", ");
-	    }
 	}
 }

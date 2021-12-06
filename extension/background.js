@@ -1,29 +1,42 @@
+var tabsUrl = {};
+
 chrome.runtime.onConnect.addListener(function(port) {
-	if (port.name === "popup") {
-		console.log("Popup opened.");
-		
-		var socket = new WebSocket("ws://localhost:8888/ws");
-		socket.addEventListener("open", function(event) {
-			port.postMessage({open: 1});
+	if (port.name === "search") {
+		port.onMessage.addListener(function(message) {
+			url = tabsUrl[message.id];
+			
+			var socket = new WebSocket("ws://localhost:8888/ws");
+			
+			socket.addEventListener("open", function(event) {
+				socket.addEventListener("message", function(event) {
+					port.postMessage(event.data);
+				});
+				message.url = url;
+				socket.send(JSON.stringify(message));
+			});
+			
+			socket.addEventListener("error", function(event) {
+				port.postMessage("Error: cannot connect to server");
+			});
 		});
-		
-		socket.addEventListener("error", function (event) {
-			port.postMessage({error: 1});
+	}
+});
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+	if ("url" in message) { // Message from popup.js
+		chrome.tabs.create({ url: chrome.runtime.getURL("search.html") }, function(tab) {
+				tabsUrl[tab.id] = message.url;
 		});
-		
-		socket.addEventListener("message", function (event) { // Message received from server
-			port.postMessage({message: event.data});
-		});
-		
-		port.onMessage.addListener(function(response) {
-			if (response.payload) {
-				socket.send(response.payload); // Send message to server
-			}
-		});
-		
-		port.onDisconnect.addListener(function() {
-			console.log("Popup closed.");
-			socket.close();
-		});
+	}
+	else { // Message from search.js
+		sendResponse({id: sender.tab.id, url: tabsUrl[sender.tab.id]}); 
+	}
+});
+
+
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+	console.log("On Removed: " + tabId);
+	if (tabId in tabsUrl) {
+		delete tabsUrl[tabId];
 	}
 });

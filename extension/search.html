@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<style type="text/css">
+		body {
+			font-size: 16px;
+		}
+		.result {
+			width: 400px;
+			padding: 10px;
+			border: 2px solid gray;
+			margin: 0; 
+		}
+	</style>
+  </head>
+  <body>
+	<p id="title">Title</p><br>
+	
+	<p>Step 1: Build index</p>
+    <button id="buildButton">Build</button><br><br>
+	
+	<p>Step 2a: Search</p>
+	<label>Query: </label><input type="text" id="query" name="query"><br>
+	<button id="searchButton">Search</button><br>
+	<p>or</p>
+	
+	<p>Step 2b: Topic Analysis</p>
+	<label>Number of topics: </label><input type="number" id="k" name="k" min="0" value="8"><br>
+	<label>Prob(background) / lambda: </label><input type="number" id="lambda" name="lambda" step="0.05" min="0" max="1" value="0.9"><br>
+	<button id="topicButton">Topic</button><br><br>
+	
+	<p>Output:</p>
+	<div id="output"></div>
+	
+	<script src="search.js"></script>
+  </body>
+</html>
