@@ -3,6 +3,9 @@ import uuid
 
 class FileManager:
     def __init__(self, url):
+        if not os.path.isdir("documents"):
+            os.mkdir("documents")
+        
         uuids = {}
         with open("documents/.meta", "a+") as f:
             f.seek(0)
