@@ -1,5 +1,6 @@
 Video Link: https://youtu.be/oM-JbrDX_Ac
 
+Steps:
 1. Python 3
 
 2. pip install tornado bs4 requests
@@ -7,15 +8,16 @@ Video Link: https://youtu.be/oM-JbrDX_Ac
 3. Java SE 17
 https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
 
-4. Test for Java setup (Optional)
+4. Test for Java setup (Optional):
 java -jar main.jar
 
----
+Expected output:
+```
 Usage:
 For building index: -b [directory path]
 For searching: -s [directory path] [query]
 For topic analysis: -t [directory path] [number of topics] [probability of background]
----
+```
 
 5. python server.py
 
