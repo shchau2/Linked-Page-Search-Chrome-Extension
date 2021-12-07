@@ -1,4 +1,4 @@
-Video Link: https://youtu.be/oM-JbrDX_Ac
+Video Link: https://youtu.be/sdzWz46usK0
 
 Steps:
 1. Python 3
