@@ -23,7 +23,7 @@ For topic analysis: -t [directory path] [number of topics] [probability of backg
 
 6. Use case: https://xuanji.appspot.com/isicp/index.html
 
-7. Click "Build", wait until the output box show "Build: [num docs] files are added".
+7. Click "Build", wait until the output box shows "Build: [num docs] files are added".
 
 8. Enter query for search or enter parameters for topic analysis.
 
