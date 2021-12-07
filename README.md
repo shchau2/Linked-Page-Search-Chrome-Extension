@@ -24,7 +24,7 @@ For topic analysis: -t [directory path] [number of topics] [probability of backg
 6. Use case: https://xuanji.appspot.com/isicp/index.html
 
 Note:
-1) If the search tab is idle for long time, Chrome may close the communication port between the tab and the background script, making the tab unresponsive to button click.
-Repeat step 3 to start a new tab, no need to build index again if the index is already built.
+1) If the search tab is idle for long time, Chrome may close the communication port between the tab and the background script, making the tab unresponsive to button clicks.
+You can start a new tab to continue searching without building the index again if the index is already built.
 
-2) All scraped files and built index is stored in server/documents folder.
+2) All scraped files and built indexes are stored in server/documents folder.
